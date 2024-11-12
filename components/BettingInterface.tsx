@@ -1,21 +1,29 @@
 'use client';
 
 import { useState } from 'react';
-// import { usePrivy } from '@privy-io/react-auth';
 import { useP2PBetting } from '@/hooks/useP2PBetting';
 import { ethers } from 'ethers';
+import { TBTCBridge } from './TBTCBridge';
 import ABI_BETTING from '../components/abi';
+
 const CONTRACT_ADDRESS = '0x43362f83B2f2caCE6d69D108627866115a2f8A4c';
 const ABI = ABI_BETTING;
 type BetStep = 'initial' | 'details' | 'moderator' | 'review' | 'share';
 
 export function BettingInterface() {
-  // const { user } = usePrivy();
   const { createBet } = useP2PBetting();
+  const [activeTab, setActiveTab] = useState('betting');
   const [currentStep, setCurrentStep] = useState<BetStep>('initial');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [betId, setBetId] = useState<string | null>(null);
+  
+  // Prediction Market State
+  const [predictionData, setPredictionData] = useState({
+    question: '',
+    probability: 50,
+    stake: ''
+  });
 
   const [betData, setBetData] = useState({
     opponent: '',
@@ -70,7 +78,7 @@ export function BettingInterface() {
 
   const renderInitialStep = () => (
     <div className="max-w-md mx-auto space-y-6 p-8">
-      <h2 className="text-2xl font-bold text-center">Create a New Bet</h2>
+      <h2 className="text-2xl font-bold text-center ">Create a New Bet</h2>
       <button
         onClick={() => setCurrentStep('details')}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all transform hover:scale-105 shadow-lg"
@@ -102,7 +110,7 @@ export function BettingInterface() {
             value={betData.opponent}
             onChange={(e) => setBetData({ ...betData, opponent: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white"
-            placeholder="@username"
+            placeholder="username"
           />
         </div>
 
@@ -164,7 +172,7 @@ export function BettingInterface() {
           value={betData.moderator}
           onChange={(e) => setBetData({ ...betData, moderator: e.target.value })}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white"
-          placeholder="@username"
+          placeholder="username"
         />
       </div>
 
@@ -262,6 +270,84 @@ export function BettingInterface() {
     </div>
   );
 
+  const renderPredictionMarket = () => (
+    <div className="max-w-md mx-auto space-y-6 p-8">
+      <h2 className="text-2xl font-bold text-center mb-8">Prediction Market</h2>
+      
+      <div className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Question
+          </label>
+          <input
+            type="text"
+            value={predictionData.question}
+            onChange={(e) => setPredictionData({ ...predictionData, question: e.target.value })}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Will BTC reach $100k by 2024?"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Probability ({predictionData.probability}%)
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={predictionData.probability}
+            onChange={(e) => setPredictionData({ ...predictionData, probability: parseInt(e.target.value) })}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+          />
+          <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <span>0%</span>
+            <span>50%</span>
+            <span>100%</span>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Stake Amount (ETH)
+          </label>
+          <input
+            type="number"
+            value={predictionData.stake}
+            onChange={(e) => setPredictionData({ ...predictionData, stake: e.target.value })}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            placeholder="0.1"
+            step="0.01"
+          />
+        </div>
+
+        <div className="flex space-x-4">
+          <button
+            onClick={() => console.log('Yes prediction:', predictionData)}
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-all"
+          >
+            Yes
+          </button>
+          <button
+            onClick={() => console.log('No prediction:', predictionData)}
+            className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-all"
+          >
+            No
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-8 bg-blue-50 p-4 rounded-lg">
+        <h3 className="font-semibold text-blue-800 mb-2">Market Info</h3>
+        <div className="space-y-2 text-sm text-blue-600">
+          <p>Total Volume: 125.5 ETH</p>
+          <p>Current Yes Price: {predictionData.probability}%</p>
+          <p>Current No Price: {100 - predictionData.probability}%</p>
+        </div>
+      </div>
+    </div>
+  );
+
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 'initial':
@@ -281,7 +367,46 @@ export function BettingInterface() {
 
   return (
     <div className="min-h-screen bg-white">
-      {renderCurrentStep()}
+      <div className="border-b border-gray-200">
+        <nav className="flex space-x-8 px-6">
+          <button
+            onClick={() => setActiveTab('betting')}
+            className={`py-4 px-1 border-b-2 ${
+              activeTab === 'betting'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            P2P Betting
+          </button>
+          <button
+            onClick={() => setActiveTab('bridge')}
+            className={`py-4 px-1 border-b-2 ${
+              activeTab === 'bridge'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            tBTC Bridge
+          </button>
+          <button
+            onClick={() => setActiveTab('prediction')}
+            className={`py-4 px-1 border-b-2 ${
+              activeTab === 'prediction'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            Prediction Market
+          </button>
+        </nav>
+      </div>
+
+      <div className="p-6">
+        {activeTab === 'betting' && renderCurrentStep()}
+        {activeTab === 'bridge' && <TBTCBridge />}
+        {activeTab === 'prediction' && renderPredictionMarket()}
+      </div>
     </div>
   );
 }
