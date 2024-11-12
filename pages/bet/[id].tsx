@@ -7,7 +7,7 @@ import { usePrivy, useWallets } from '@privy-io/react-auth';
 // import { sendTransaction } from 'viem/actions';
 import ABI_BETTING from '@/components/abi';
 
-const CONTRACT_ADDRESS = '0x43362f83B2f2caCE6d69D108627866115a2f8A4c';
+const CONTRACT_ADDRESS = '0xD6302d3bDDb59Da0217B4A04778d3642A379dA0E';
 const SEPOLIA_CHAIN_ID = 11155111;
 
 export default function BetPage() {

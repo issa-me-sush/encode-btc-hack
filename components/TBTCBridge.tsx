@@ -8,8 +8,8 @@ import dynamic from 'next/dynamic';
 const TBTCModule = dynamic(
   () => import('@keep-network/tbtc-v2.ts').then(mod => {
     const TBTCComponent = () => {
-      // Use mod.TBTC here
-      return null; // or your actual JSX
+    
+      return null; 
     };
     return { default: TBTCComponent };
   }),

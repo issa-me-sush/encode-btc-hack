@@ -6,7 +6,7 @@ import { ethers } from 'ethers';
 import { TBTCBridge } from './TBTCBridge';
 import ABI_BETTING from '../components/abi';
 
-const CONTRACT_ADDRESS = '0x43362f83B2f2caCE6d69D108627866115a2f8A4c';
+const CONTRACT_ADDRESS = '0xD6302d3bDDb59Da0217B4A04778d3642A379dA0E';
 const ABI = ABI_BETTING;
 type BetStep = 'initial' | 'details' | 'moderator' | 'review' | 'share';
 
