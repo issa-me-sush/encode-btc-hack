@@ -84,7 +84,7 @@ export default function App({ Component, pageProps }: AppProps) {
           embeddedWallets: {
             createOnLogin: 'users-without-wallets',
           },
-          defaultChain: citreaTestnet,
+          defaultChain: sepolia,
           supportedChains: [
             sepolia,
             rootstockMainnet,

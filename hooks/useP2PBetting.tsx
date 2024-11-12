@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import { ethers } from 'ethers';
 import ABI_BETTING from '../components/abi';
-const CONTRACT_ADDRESS = '0xD6302d3bDDb59Da0217B4A04778d3642A379dA0E';
+const CONTRACT_ADDRESS = '0x43362f83B2f2caCE6d69D108627866115a2f8A4c';
 const ABI = ABI_BETTING;
 
 export function useP2PBetting() {
