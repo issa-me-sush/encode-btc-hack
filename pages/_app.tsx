@@ -1,8 +1,8 @@
 import type { AppProps } from 'next/app';
-import Script from 'next/script';
+// import Script from 'next/script';
 import '@/styles/globals.css';
 import {PrivyProvider} from '@privy-io/react-auth';
-import {bsc , sepolia} from 'viem/chains'
+import { sepolia} from 'viem/chains'
 
 export const metadata = {
   title: 'P2P Betting App',

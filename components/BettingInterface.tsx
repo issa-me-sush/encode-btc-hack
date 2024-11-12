@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { usePrivy } from '@privy-io/react-auth';
+// import { usePrivy } from '@privy-io/react-auth';
 import { useP2PBetting } from '@/hooks/useP2PBetting';
 import { ethers } from 'ethers';
 import ABI_BETTING from '../components/abi';
@@ -10,7 +10,7 @@ const ABI = ABI_BETTING;
 type BetStep = 'initial' | 'details' | 'moderator' | 'review' | 'share';
 
 export function BettingInterface() {
-  const { user } = usePrivy();
+  // const { user } = usePrivy();
   const { createBet } = useP2PBetting();
   const [currentStep, setCurrentStep] = useState<BetStep>('initial');
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +60,7 @@ export function BettingInterface() {
       }
       
       setCurrentStep('share');
+  //  @ts-ignore 
     } catch (err: any) {
       setError(err.message || 'Failed to create bet');
     } finally {
@@ -94,7 +95,7 @@ export function BettingInterface() {
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Opponent's Username
+            Opponent&apos;s Username
           </label>
           <input
             type="text"
@@ -156,7 +157,7 @@ export function BettingInterface() {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Moderator's Username
+          Moderator&apos;s Username
         </label>
         <input
           type="text"

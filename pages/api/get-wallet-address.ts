@@ -34,11 +34,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const data = await response.json();
 console.log("response" , data)
     // Find the wallet address from the response
+    // @ts-ignore 
     const walletAccount = data.linked_accounts?.find((account: any) => account.type === 'wallet');
     const walletAddress = walletAccount?.address;
 
     return res.status(200).json({ walletAddress });
   } catch (error) {
-    return res.status(500).json({ error: 'Failed to get/create wallet' });
+    return res.status(500).json({ error: 'Failed to get/create wallet' , error_message: error});
   }
 }

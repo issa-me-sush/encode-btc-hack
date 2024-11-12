@@ -15,6 +15,7 @@ export default function BetPage() {
   const id = pathname?.split('/').pop();
   const { user, authenticated, ready, login , sendTransaction } = usePrivy();
   const { wallets } = useWallets();
+//   @ts-ignore 
   const [betDetails, setBetDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +63,7 @@ export default function BetPage() {
 
         console.log("Formatted bet:", formattedBet);
         setBetDetails(formattedBet);
-
+// @ts-ignore 
       } catch (error: any) {
         console.error('Error details:', error);
         setError(error.message || "Failed to fetch bet details");
@@ -161,18 +162,18 @@ export default function BetPage() {
   const isModerator = user?.twitter?.username === betDetails?.moderatorTwitter;
   const isAuthorized = isOpponent || isModerator;
 
-  const getBetStatus = (status: number) => {
-    switch (status) {
-      case 0:
-        return "Created";
-      case 1:
-        return "Accepted by Opponent";
-      case 2:
-        return "Active";
-      default:
-        return "Unknown";
-    }
-  };
+//   const getBetStatus = (status: number) => {
+//     switch (status) {
+//       case 0:
+//         return "Created";
+//       case 1:
+//         return "Accepted by Opponent";
+//       case 2:
+//         return "Active";
+//       default:
+//         return "Unknown";
+//     }
+//   };
 
   return (
     <div className="max-w-md mx-auto p-8">

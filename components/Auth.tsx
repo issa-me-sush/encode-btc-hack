@@ -4,7 +4,7 @@ import { usePrivy } from '@privy-io/react-auth';
 import { BettingInterface } from './BettingInterface';
 
 export function Auth() {
-  const { login, authenticated, user } = usePrivy();
+  const { login, authenticated } = usePrivy();
 
   if (!authenticated) {
     return (
